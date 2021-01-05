@@ -1,0 +1,13 @@
+#pragma once
+#include <iostream>
+#include <stdio.h>
+#include <sys/wait.h>
+#include <sys/ioctl.h>
+#include <unistd.h>
+#include <arpa/inet.h>
+#include <string.h>
+#include <stdlib.h>
+#include <sys/types.h>
+#include <sys/socket.h>
+#include <pthread.h>
+#include "create_socket.h"
