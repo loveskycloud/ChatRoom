@@ -12,6 +12,9 @@ struct User *client;
 bool check_online(char *name) {
     for (int i = 0; i < MAX_CLIENT; i++) {
         if (client[i].online && !strcmp(client[i].name, name)) {
+
+            printf("D: %s kuai qu xue xi\n", client[i].name);
+
             return true;
         }
     }
@@ -25,20 +28,31 @@ int find_sub() {
     return -1;
 }
 
-void *work(void *) {
-    printf("nothing\n");
+void *work(void *arg) {
+    printf("welcome to login\n");
+    struct User *client = (struct User *)arg;  
+    struct RecvMsg msg;
+    while (1) {
+        msg = chat_recv(&client->fd);
+            if (msg.retval < 0) {
+                printf("client logout, msg\n");
+                close(client->fd);
+                client->online = 0;
+                return NULL;
+            }
+            printf("%s : %s\n", msg.msg.from, msg.msg.message);
+    }
     return (void *)NULL;
 }
 
-char *conf = (char *)"../conf/server.conf";
+char *conf = (char *)"./conf/server.conf";
 
 
 int main() {
     int port, server_listen, fd;
-    port = htons(atoi(get_value((char *)conf, (char *)"Server_Ip")));
-    client = (struct User *)malloc(sizeof(struct User) * MAX_CLIENT);
-    memset(&client, 0, sizeof(client));
-
+    port = atoi(get_value((char *)conf, (char *)"Server_Port"));
+    client = (struct User *)calloc(MAX_CLIENT, sizeof(struct User));
+    printf("port = %d, \n", port);
     if ((server_listen = create_tcp_socket(port)) < 0) {
         perror("create_tcp_socket");
         return 1;
@@ -49,10 +63,11 @@ int main() {
             perror("accept");
             continue;
         }
-        
+
         RecvMsg recvmsg = chat_recv(&fd);
 
         if (recvmsg.retval < 0) {
+            printf("faild\n");
             close(fd);
             continue;
         }
@@ -66,7 +81,8 @@ int main() {
             client[sub].online = 1;
             client[sub].fd = fd;
             strcpy(client[sub].name, recvmsg.msg.from);
-            pthread_create(&client[sub].tid, NULL, work, NULL);
+            pthread_create(&client[sub].tid, NULL, work, (void *)&client[sub]);
+
         }
     }
 
