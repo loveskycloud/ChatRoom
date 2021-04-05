@@ -11,3 +11,6 @@
 #include <sys/socket.h>
 #include <pthread.h>
 #include "create_socket.h"
+#include "get_value.h"
+#include "common.h"
+#include "Tcp.h"
