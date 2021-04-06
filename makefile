@@ -14,6 +14,6 @@ client1:
 chatserver:
 	g++ -g ./server/server_bak.c -I ./include ./src/get_value.c ./src/common.c ./src/Tcp.c -pthread -o Server
 chatclient:
-	g++ ./client/client_bak.c -I ./include ./src/get_value.c ./src/Tcp.c ./src/common.c -o Client
+	g++ -g ./client/client_bak.c -I ./include ./src/get_value.c ./src/Tcp.c ./src/common.c -o Client
 clean:
 	rm ./bin/*

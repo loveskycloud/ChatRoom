@@ -9,11 +9,35 @@ struct User{
 
 struct User *client;
 
+void send_all(struct RecvMsg msg) {
+    for (int i = 0; i < MAX_CLIENT; i++) {
+        /*
+        if (client[i].online && strcmp(msg.msg.from, client[i].name)) {
+            chat_send(msg, &client[i].fd);
+        }
+        */
+        if (client[i].online) {
+            chat_send(msg, &client[i].fd);
+        }
+    }
+    return ;
+}
+
+int send_to(struct RecvMsg msg) {
+    for (int i = 0; i < MAX_CLIENT; i++) {
+        if (client[i].online && !strcmp(client[i].name, msg.msg.to)) {
+            chat_send(msg, &client[i].fd);
+            return 1;
+        }
+    }
+    return -1;
+}
+
 bool check_online(char *name) {
     for (int i = 0; i < MAX_CLIENT; i++) {
         if (client[i].online && !strcmp(client[i].name, name)) {
 
-            printf("D: %s kuai qu xue xi\n", client[i].name);
+            printf("D: %s is online\n", client[i].name);
 
             return true;
         }
@@ -28,19 +52,34 @@ int find_sub() {
     return -1;
 }
 
+
+
 void *work(void *arg) {
-    printf("welcome to login\n");
     struct User *client = (struct User *)arg;  
     struct RecvMsg msg;
+    printf("%s login\n", client->name);
     while (1) {
         msg = chat_recv(&client->fd);
             if (msg.retval < 0) {
-                printf("client logout, msg\n");
+                printf("%s logout!\n", client->name);
                 close(client->fd);
                 client->online = 0;
                 return NULL;
             }
             printf("%s : %s\n", msg.msg.from, msg.msg.message);
+
+            if (msg.msg.flag == 0) {
+                send_all(msg);
+            } else if (msg.msg.flag == 1) {
+                if(send_to(msg) < 0) {
+                    msg.msg.flag = 2;
+                    strcpy(msg.msg.from, "system");
+                    strcpy(msg.msg.message, "The friend not online");
+                    chat_send(msg, &client->fd);
+                }
+            } else {
+
+            }
     }
     return (void *)NULL;
 }
@@ -74,6 +113,8 @@ int main() {
 
         if (check_online(recvmsg.msg.from)) {
             //the user already online
+            //FIXME
+            close(fd);
             continue;
         } else {
             int sub;

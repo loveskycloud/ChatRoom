@@ -14,3 +14,4 @@
 #include "get_value.h"
 #include "common.h"
 #include "Tcp.h"
+#include <signal.h>

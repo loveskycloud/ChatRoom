@@ -8,3 +8,11 @@ struct RecvMsg chat_recv(int *fd) {
     } 
     return tmp;
 }
+
+void chat_send(struct RecvMsg msg, int *fd) {
+    if (send(*fd, &msg, sizeof(msg), 0) <= 0) {
+        perror("send");
+        exit(1);
+    }
+    return ;
+}
