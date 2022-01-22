@@ -30,3 +30,6 @@ message + enter
 merge two
 ```
 
+```
+merge trhee
+```
