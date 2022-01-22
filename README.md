@@ -3,7 +3,7 @@
 在本地通过命令make chatclient即可编译客户端
 
 `./Server` 启动服务端
-`./Client` 启动客户端
+`./Client` aoligei 
 `tail -f text` 模拟启动聊天窗口
 ```
 struct Message {
@@ -27,6 +27,6 @@ public message :
 message + enter 
 ```
 ```
-merge test
+merge two
 ```
 
