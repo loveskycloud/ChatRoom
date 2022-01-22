@@ -26,10 +26,3 @@ public message :
 ```
 message + enter 
 ```
-```
-merge two
-```
-
-```
-merge trhee
-```
