@@ -27,9 +27,3 @@ Server_Port = Server Port
 message + enter 
 ```
 
-fangsong
-
-<<<<<<< Updated upstream
-=======
-fangsong1
->>>>>>> Stashed changes
