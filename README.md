@@ -18,7 +18,7 @@ struct Message {
 Server_Port = Server Port
 ```
 
-* private message : 
+private message : 
 ```
 @username message + enter
 ```
